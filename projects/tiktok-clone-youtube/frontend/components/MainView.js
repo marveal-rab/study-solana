@@ -6,6 +6,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { SOLANA_HOST } from "../utils/const";
 import { getProgramInstance } from "../utils";
 import useTikTok from "../hooks/useTiktok";
+import UploadModel from "./UploadModel";
+import Video from "./Video";
+import BottomBar from "./BottomBar";
+import styles from "../styles/MainView.module.css";
 
 const anchor = require("@project-serum/anchor");
 const utf8 = anchor.utils.bytes.utf8;
@@ -25,21 +29,22 @@ const MainView = () => {
   const program = getProgramInstance(connection, wallet);
 
   const [tiktoks, setTiktoks] = useState();
-  const [newVideoShow, SetNewVideoShow] = useState(false);
+  const [newVideoShow, setNewVideoShow] = useState(false);
   const [description, setDescription] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [userDetail, setUserDetail] = useState();
 
   const { signup } = useAccount();
-  const { getTiktoks, likeVideo, createComment, newVideo } = useTikTok(
-    setTiktoks,
-    userDetail,
-    videoUrl,
-    description,
-    setDescription,
-    setVideoUrl,
-    SetNewVideoShow
-  );
+  const { getTiktoks, likeVideo, createComment, getComments, newVideo } =
+    useTikTok(
+      setTiktoks,
+      userDetail,
+      videoUrl,
+      description,
+      setDescription,
+      setVideoUrl,
+      setNewVideoShow
+    );
 
   useEffect(() => {
     if (wallet.connected) {
@@ -66,7 +71,46 @@ const MainView = () => {
   return (
     <>
       {isAccount ? (
-        <div>TikTok will go here</div>
+        <div>
+          {newVideoShow && (
+            <UploadModel
+              description={description}
+              videoUrl={videoUrl}
+              setVideoUrl={setVideoUrl}
+              newVideo={newVideo}
+              setDescription={setDescription}
+              setNewVideoShow={setNewVideoShow}
+            />
+          )}
+          <div className={styles.appVideos}>
+            {!tiktoks || tiktoks.length === 0 ? (
+              <h1>no Videos</h1>
+            ) : (
+              tiktoks.map((tiktok, id) => {
+                return (
+                  <Video
+                    key={id}
+                    address={tiktok.publicKey.toBase58()}
+                    url={tiktok.account.videoUrl}
+                    channel={tiktok.account.creatorName}
+                    index={tiktok.account.index.toNumber()}
+                    likes={tiktok.account.likes}
+                    description={tiktok.account.description}
+                    likeVideo={likeVideo}
+                    likesAddress={tiktok.account.peopleWhoLiked}
+                    createComment={createComment}
+                    getComments={getComments}
+                    commentsCount={tiktok.account.commentCount.toNumber()}
+                  />
+                );
+              })
+            )}
+          </div>
+          <BottomBar
+            setNewVideoShow={setNewVideoShow}
+            getTiktoks={getTiktoks}
+          />
+        </div>
       ) : (
         <Signup signup={signup} wallet={wallet.publicKey.toBase58()} />
       )}

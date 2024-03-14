@@ -15,13 +15,13 @@ const defaultAccount = {
 };
 
 const useTikTok = (
-  setTitoks,
+  setTiktoks,
   userDetail,
   videoUrl,
   description,
   setDescription,
   setVideoUrl,
-  SetNewVideoShow
+  setNewVideoShow
 ) => {
   const wallet = useWallet();
   const connection = new anchor.web3.Connection(SOLANA_HOST);
@@ -29,7 +29,8 @@ const useTikTok = (
 
   const getTiktoks = async () => {
     const videos = await program.account.videoAccount.all();
-    setTitoks(videos);
+    setTiktoks(videos);
+    console.log(videos);
   };
 
   const likeVideo = async (address) => {};
@@ -52,7 +53,7 @@ const useTikTok = (
       {
         accounts: {
           video: video_pda,
-          randomKey: randomKey,
+          randomkey: randomKey,
           authority: wallet.publicKey,
           ...defaultAccount,
         },
@@ -61,7 +62,7 @@ const useTikTok = (
 
     setDescription("");
     setVideoUrl("");
-    SetNewVideoShow(false);
+    setNewVideoShow(false);
   };
 
   const getComments = async (address, count) => {};
