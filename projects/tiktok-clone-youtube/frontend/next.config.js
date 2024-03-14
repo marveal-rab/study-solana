@@ -6,12 +6,13 @@ const nextConfig = {
   },
   images: {
     domains: [
-      'static.thenounproject.com',
-      'encrypted-tbn0.gstatic.com',
-      'avatars.dicebear.com',
-      'png.pngtree.com',
+      "static.thenounproject.com",
+      "encrypted-tbn0.gstatic.com",
+      "avatars.dicebear.com",
+      "png.pngtree.com",
+      "api.dicebear.com",
     ],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

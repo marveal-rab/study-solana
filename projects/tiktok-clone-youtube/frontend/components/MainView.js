@@ -62,6 +62,7 @@ const MainView = () => {
       const userInfo = await program.account.userAccount.fetch(user_pda);
       setUserDetail(userInfo);
       setAccount(true);
+      console.log(userInfo);
     } catch (error) {
       setAccount(false);
       console.error(error);
@@ -101,6 +102,7 @@ const MainView = () => {
                     createComment={createComment}
                     getComments={getComments}
                     commentsCount={tiktok.account.commentCount.toNumber()}
+                    shares={tiktok.account.shares}
                   />
                 );
               })

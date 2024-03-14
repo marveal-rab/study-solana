@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react";
 import styles from "../styles/Video.module.css";
 import Comments from "./Comments";
+import SideBar from "./SideBar";
+import Footer from "./Footer";
 
-const Video = (
+const Video = ({
   address,
   url,
   channel,
@@ -13,8 +15,9 @@ const Video = (
   likesAddress,
   createComment,
   getComments,
-  commentsCount
-) => {
+  commentsCount,
+  shares,
+}) => {
   const [playing, setPlaying] = useState(false);
   const [showCommentModel, setShowCommentModel] = useState(false);
   const videoRef = useRef(null);
@@ -46,7 +49,29 @@ const Video = (
         ref={videoRef}
         src={url}
       />
-      {showCommentModel && <Comments />}
+      <Footer channel={channel} description={description} song={index}></Footer>
+
+      <SideBar
+        address={address}
+        likes={likes}
+        shares={shares}
+        onShowComments={showComments}
+        likeVideo={likeVideo}
+        index={index}
+        likesAddress={likesAddress}
+        messages={commentsCount}
+      ></SideBar>
+
+      {showCommentModel && (
+        <Comments
+          onHide={hideComments}
+          index={index}
+          address={address}
+          createComment={createComment}
+          getComments={getComments}
+          commentsCount={commentsCount}
+        />
+      )}
     </div>
   );
 };
